@@ -1,0 +1,51 @@
+using Badengine.Engine;
+
+namespace Badengine; 
+
+public sealed class GameObject {
+    private readonly List<Component> _components = new List<Component>();
+    private Scene? _scene;
+    
+    internal Scene Scene {
+        get {
+            if(_scene == null) {
+                throw new Exception("gameObject not registered");
+            }
+
+            return _scene;
+        }
+        set {
+            if(_scene != null) {
+                throw new Exception("gameObject already registered");
+            }
+
+            _scene = value;
+        }
+    }
+
+    public void AddComponent(Component component) {
+        component.GameObject = this;
+        _components.Add(component);
+    }
+    
+    public Component? GetComponent<T>() {
+        foreach(Component component in _components) {
+            if(component is T) {
+                return component;
+            }
+        }
+        return null;
+    }
+
+    internal void Update() {
+        foreach(Component component in _components) {
+            component.Update();
+        }
+    }
+
+    internal void Start() {
+        foreach(Component component in _components) {
+            component.Start();
+        }
+    }
+}
