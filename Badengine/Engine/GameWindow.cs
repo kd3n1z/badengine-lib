@@ -14,14 +14,15 @@ public class GameWindow {
 
         while (!WindowShouldClose()) {
             BeginDrawing();
-
-            Graphics.Clean();
-
+            
             if (_scene == null) {
                 Graphics.UI.RenderText("no scene set", 400, 225, new Color(255, 255, 255, 255), 32,
                     Graphics.UI.TextOrigin.Center);
             }
             else {
+                _scene.Start();
+                _scene.Update();
+                
                 _scene.Render();
             }
 
