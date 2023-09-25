@@ -1,5 +1,6 @@
 namespace Badengine;
 
+// Copied from Raylib_cs.Color
 public struct Color {
     public byte R;
     public byte G;
