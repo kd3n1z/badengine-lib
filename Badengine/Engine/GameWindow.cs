@@ -8,17 +8,18 @@ public class GameWindow {
     public void LoadScene(Scene scene) {
         _scene = scene;
     }
-    
+
     public void Run(string title) {
         InitWindow(800, 450, title);
 
         while (!WindowShouldClose()) {
             BeginDrawing();
-            
+
             Graphics.Clean();
 
             if (_scene == null) {
-                Graphics.RenderText("no scene set", 400, 225, new Color(255, 255, 255, 255), 32, TextOrigin.Center);
+                Graphics.UI.RenderText("no scene set", 400, 225, new Color(255, 255, 255, 255), 32,
+                    Graphics.UI.TextOrigin.Center);
             }
             else {
                 _scene.Render();
@@ -26,7 +27,7 @@ public class GameWindow {
 
             EndDrawing();
         }
-        
+
         CloseWindow();
     }
 }
