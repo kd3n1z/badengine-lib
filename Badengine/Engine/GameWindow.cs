@@ -13,20 +13,20 @@ public class GameWindow {
         InitWindow(800, 450, title);
 
         while (!WindowShouldClose()) {
-            BeginDrawing();
-            
+            Graphics.BeginDrawing();
+
             if (_scene == null) {
-                Graphics.UI.RenderText("no scene set", 400, 225, new Color(255, 255, 255, 255), 32,
+                Graphics.UI.DrawText("no scene set", 400, 225, new Color(255, 255, 255), 32,
                     Graphics.UI.TextOrigin.Center);
             }
             else {
                 _scene.Start();
                 _scene.Update();
-                
+
                 _scene.Render();
             }
 
-            EndDrawing();
+            Graphics.EndDrawing();
         }
 
         CloseWindow();

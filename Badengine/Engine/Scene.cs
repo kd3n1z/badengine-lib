@@ -12,7 +12,7 @@ public sealed class Scene {
     private bool _startCalled;
 
     internal void Start() {
-        if (_startCalled) {
+        if (!_startCalled) {
             _startCalled = true;
             foreach (GameObject go in _gameObjects) {
                 go.Start();
@@ -28,5 +28,9 @@ public sealed class Scene {
 
     internal void Render() {
         Graphics.Clean();
+
+        foreach (GameObject gameObject in _gameObjects) {
+            gameObject.Render();
+        }
     }
 }
