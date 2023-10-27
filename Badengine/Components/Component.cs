@@ -20,6 +20,8 @@ public abstract class Component {
         }
     }
 
+    public T? GetComponent<T>() where T : Component => GameObject.GetComponent<T>();
+
     public virtual void Start() { }
     public virtual void Update() { }
 }
