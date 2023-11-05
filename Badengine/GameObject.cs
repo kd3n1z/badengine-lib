@@ -1,4 +1,5 @@
 using Badengine.Engine;
+using Badengine.Exceptions;
 
 namespace Badengine;
 
@@ -10,14 +11,14 @@ public sealed class GameObject {
     internal Scene Scene {
         get {
             if (_scene == null) {
-                throw new Exception("gameObject not registered");
+                throw new GameObjectNotRegisteredException();
             }
 
             return _scene;
         }
         set {
             if (_scene != null) {
-                throw new Exception("gameObject already registered");
+                throw new GameObjectAlreadyRegisteredException();
             }
 
             _scene = value;

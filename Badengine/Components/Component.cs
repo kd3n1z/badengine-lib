@@ -1,3 +1,5 @@
+using Badengine.Exceptions;
+
 namespace Badengine;
 
 public abstract class Component {
@@ -6,14 +8,14 @@ public abstract class Component {
     public GameObject GameObject {
         get {
             if (_gameObject == null) {
-                throw new Exception("component must be registered");
+                throw new ComponentNotRegisteredException();
             }
 
             return _gameObject;
         }
         set {
             if (_gameObject != null) {
-                throw new Exception("component already registered");
+                throw new ComponentAlreadyRegisteredException();
             }
 
             _gameObject = value;
