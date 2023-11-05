@@ -4,8 +4,9 @@ using Badengine.Exceptions;
 namespace Badengine;
 
 public sealed class GameObject {
-    private readonly List<Component> _components = new List<Component>();
-    private readonly List<IRenderer> _renderers = new List<IRenderer>();
+    private readonly List<Component> _components = new();
+    private readonly List<IRenderer> _renderers = new();
+    public readonly Transform Transform;
     private Scene? _scene;
 
     internal Scene Scene {
@@ -23,6 +24,10 @@ public sealed class GameObject {
 
             _scene = value;
         }
+    }
+
+    public GameObject() {
+        Transform = new Transform(this);
     }
 
     public void AddComponent(Component component) {
