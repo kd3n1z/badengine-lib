@@ -1,9 +1,10 @@
+using Badengine.Attributes;
 using Badengine.Exceptions;
 
 namespace Badengine;
 
 public abstract class Component {
-    private GameObject? _gameObject;
+    private protected GameObject? _gameObject;
 
     public GameObject GameObject {
         get {
@@ -14,6 +15,10 @@ public abstract class Component {
             return _gameObject;
         }
         set {
+            if (Attribute.IsDefined(GetType(), typeof(NonRegistrable))) {
+                throw new ComponentIsNonRegistrableException();
+            }
+
             if (_gameObject != null) {
                 throw new ComponentAlreadyRegisteredException();
             }
