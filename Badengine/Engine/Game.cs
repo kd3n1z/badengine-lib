@@ -13,6 +13,8 @@ public static class Game {
         InitWindow(800, 450, title);
 
         while (!WindowShouldClose()) {
+            DateTime frameStart = DateTime.Now;
+
             Graphics.BeginDrawing();
 
             if (_scene == null) {
@@ -27,6 +29,8 @@ public static class Game {
             }
 
             Graphics.EndDrawing();
+            
+            Time.DeltaTime = (float)(DateTime.Now - frameStart).TotalSeconds;
         }
 
         CloseWindow();
