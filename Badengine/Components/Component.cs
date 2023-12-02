@@ -27,6 +27,8 @@ public abstract class Component {
         }
     }
 
+    public Transform Transform => _gameObject!.Transform;
+
     public T? GetComponent<T>() where T : Component => GameObject.GetComponent<T>();
 
     public virtual void Start() { }
