@@ -6,6 +6,7 @@ namespace Badengine;
 public sealed class GameObject {
     private readonly List<Component> _components = new();
     private readonly List<IRenderer> _renderers = new();
+    private readonly List<ICollider> _colliders = new();
     public readonly Transform Transform;
     private Scene? _scene;
 
@@ -37,6 +38,10 @@ public sealed class GameObject {
             _renderers.Add(renderer);
         }
 
+        if (component is ICollider collider) {
+            _colliders.Add(collider);
+        }
+
         _components.Add(component);
     }
 
@@ -66,5 +71,9 @@ public sealed class GameObject {
         foreach (IRenderer renderer in _renderers) {
             renderer.Render();
         }
+    }
+    
+    internal bool CheckColliderOverlaps(Vector2 point) {
+        return _colliders.Any(collider => collider.OverlapsPoint(point));
     }
 }

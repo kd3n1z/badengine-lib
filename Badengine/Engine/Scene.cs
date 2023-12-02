@@ -33,4 +33,8 @@ public sealed class Scene {
             gameObject.Render();
         }
     }
+
+    internal bool CheckColliderOverlaps(Vector2 point) {
+        return _gameObjects.Any(gameObject => gameObject.CheckColliderOverlaps(point));
+    }
 }
