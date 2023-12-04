@@ -6,7 +6,8 @@ namespace Badengine;
 public sealed class GameObject {
     private readonly List<Component> _components = new();
     private readonly List<IRenderer> _renderers = new();
-    private readonly List<ICollider> _colliders = new();
+    internal ICollider[] Colliders { get; private set; } = Array.Empty<ICollider>();
+
     public readonly Transform Transform;
     private Scene? _scene;
 
@@ -39,7 +40,11 @@ public sealed class GameObject {
         }
 
         if (component is ICollider collider) {
-            _colliders.Add(collider);
+            ICollider[] modifiedColliders = new ICollider[Colliders.Length + 1];
+            Array.Copy(Colliders, modifiedColliders, Colliders.Length);
+            modifiedColliders[Colliders.Length] = collider;
+
+            Colliders = modifiedColliders;
         }
 
         _components.Add(component);
@@ -72,8 +77,12 @@ public sealed class GameObject {
             renderer.Render();
         }
     }
-    
-    internal bool CheckColliderOverlaps(Vector2 point) {
-        return _colliders.Any(collider => collider.OverlapsPoint(point));
+
+    internal bool CheckColliderOverlaps(Vector2 point, ICollider[] ignoredColliders) {
+        return Colliders.Any(collider => !ignoredColliders.Contains(collider) && collider.OverlapsPoint(point));
+    }
+
+    internal bool CheckColliderOverlaps(Vector2 bottomLeft, Vector2 topRight, ICollider[] ignoredColliders) {
+        return Colliders.Any(collider => !ignoredColliders.Contains(collider) && collider.OverlapsBox(bottomLeft, topRight));
     }
 }
