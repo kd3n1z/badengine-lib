@@ -26,6 +26,12 @@ public sealed class Scene {
         }
     }
 
+    internal void FixedUpdate() {
+        foreach (GameObject go in _gameObjects) {
+            go.FixedUpdate();
+        }
+    }
+
     internal void Render() {
         Graphics.Clean();
 

@@ -66,6 +66,12 @@ public sealed class GameObject {
         }
     }
 
+    internal void FixedUpdate() {
+        foreach (Component component in _components) {
+            component.FixedUpdate();
+        }
+    }
+
     internal void Start() {
         foreach (Component component in _components) {
             component.Start();

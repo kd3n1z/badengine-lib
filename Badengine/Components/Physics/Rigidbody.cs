@@ -4,11 +4,11 @@ public class Rigidbody : Component {
     public float Gravity = -9.81f;
     public Vector2 Velocity = new();
 
-    public override void Update() {
-        Velocity.Y += Gravity * Time.DeltaTime;
+    public override void FixedUpdate() {
+        Velocity.Y += Gravity * Time.FixedDeltaTime;
         ICollider[] colliders = GameObject.Colliders;
 
-        Vector2 move = Velocity * Time.DeltaTime;
+        Vector2 move = Velocity * Time.FixedDeltaTime;
 
         if (!CheckOverlapsWithOffset(new Vector2(move.X, 0), colliders)) {
             Transform.Position.X += move.X;
