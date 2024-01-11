@@ -4,7 +4,7 @@ using static Raylib_cs.Raylib;
 namespace Badengine.Engine;
 
 public static class Game {
-    public const string Version = "1.1.1";
+    public const string Version = "1.1.2";
 
     private static Scene? _scene;
 
@@ -14,18 +14,22 @@ public static class Game {
 
     public static void AddSceneBuilder(string sceneName, Func<Scene> builder) => SceneManager.AddSceneBuilder(sceneName, builder);
 
+    private static int _debugPhysicsFrames;
+
     public static void Run(string title, float fixedDeltaTime = 0, bool debug = false, string buildInfo = "") {
         InitWindow(800, 450, title);
 
         Time.FixedDeltaTime = fixedDeltaTime;
 
         CancellationTokenSource physicsThreadCancellationTokenSource = new CancellationTokenSource();
-        Thread physicsThread = new(() => PhysicsThread(physicsThreadCancellationTokenSource.Token, fixedDeltaTime));
+        Thread physicsThread = new(() => PhysicsThread(physicsThreadCancellationTokenSource.Token, fixedDeltaTime, debug));
         physicsThread.Start();
 
         bool debugVisible = false;
-        float debugAverageDeltaTimeSum = 0;
-        List<float> debugDeltaTimes = new();
+        int debugAverageFps = 0;
+        int debugAveragePhysicsFps = 0;
+        DateTime debugPreviousFpsUpdate = DateTime.Now;
+        int debugFrames = 0;
 
         while (!WindowShouldClose()) {
             DateTime frameStart = DateTime.Now;
@@ -42,26 +46,31 @@ public static class Game {
 
                 _scene.Render();
             }
-            
-            if (debug) {
-                debugDeltaTimes.Add(Time.DeltaTime);
-                debugAverageDeltaTimeSum += Time.DeltaTime;
 
-                while (debugDeltaTimes.Count > 300) {
-                    debugAverageDeltaTimeSum -= debugDeltaTimes[0];
-                    debugDeltaTimes.RemoveAt(0);
+            if (debug) {
+                debugFrames++;
+
+                DateTime updateTime = DateTime.Now;
+                double interval = updateTime.Subtract(debugPreviousFpsUpdate).TotalSeconds;
+
+                if (interval > 0.5) {
+                    debugAverageFps = (int)(debugFrames / interval);
+                    debugAveragePhysicsFps = (int)(_debugPhysicsFrames / interval);
+                    debugPreviousFpsUpdate = updateTime;
+                    debugFrames = 0;
+                    _debugPhysicsFrames = 0;
                 }
-                
+
                 if (Input.GetKeyDown(KeyCode.F1)) {
                     debugVisible = !debugVisible;
                 }
-                
+
 
                 if (debugVisible) {
                     Graphics.UI.DrawText(
-                        "avg fps: " + (int)(1 / (debugAverageDeltaTimeSum / debugDeltaTimes.Count)) + 
-                        "\npfps: " + (int)(1 / Time.FixedDeltaTime) +
-                        "\ninfo:\n- raylib v" + RAYLIB_VERSION + 
+                        "fps: " + debugAverageFps +
+                        "\npfps: " + debugAveragePhysicsFps +
+                        "\ninfo:\n- raylib v" + RAYLIB_VERSION +
                         "\n- badengine-lib v" + Version +
                         (buildInfo != "" ? "\n- " + buildInfo : ""),
                         20, 20, Color.Red, 18, Graphics.UI.TextOrigin.Left
@@ -80,10 +89,14 @@ public static class Game {
         physicsThread.Join();
     }
 
-    private static void PhysicsThread(CancellationToken cancellationToken, float deltaTime) {
+    private static void PhysicsThread(CancellationToken cancellationToken, float deltaTime, bool debug) {
         DateTime previousFrameFinish = DateTime.Now;
 
         while (!cancellationToken.IsCancellationRequested) {
+            if (debug) {
+                _debugPhysicsFrames++;
+            }
+
             DateTime frameStart = DateTime.Now;
 
             _scene?.FixedUpdate();
