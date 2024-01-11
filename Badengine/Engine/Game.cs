@@ -4,7 +4,7 @@ using static Raylib_cs.Raylib;
 namespace Badengine.Engine;
 
 public static class Game {
-    public const string Version = "1.1.0";
+    public const string Version = "1.1.1";
 
     private static Scene? _scene;
 
@@ -61,7 +61,9 @@ public static class Game {
                     Graphics.UI.DrawText(
                         "avg fps: " + (int)(1 / (debugAverageDeltaTimeSum / debugDeltaTimes.Count)) + 
                         "\npfps: " + (int)(1 / Time.FixedDeltaTime) +
-                        "\ninfo:\n- lib v" + Version + (buildInfo != "" ? "\n- " + buildInfo : ""),
+                        "\ninfo:\n- raylib v" + RAYLIB_VERSION + 
+                        "\n- badengine-lib v" + Version +
+                        (buildInfo != "" ? "\n- " + buildInfo : ""),
                         20, 20, Color.Red, 18, Graphics.UI.TextOrigin.Left
                     );
                 }
