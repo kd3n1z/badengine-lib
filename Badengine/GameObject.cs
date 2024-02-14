@@ -11,6 +11,9 @@ public sealed class GameObject {
     public readonly Transform Transform;
     private Scene? _scene;
 
+    public string Name = "New GameObject";
+    public readonly string Id;
+
     internal Scene Scene {
         get {
             if (_scene == null) {
@@ -28,9 +31,12 @@ public sealed class GameObject {
         }
     }
 
-    public GameObject() {
+    public GameObject(string id) {
         Transform = new Transform(this);
+        Id = id;
     }
+
+    public GameObject() : this(Guid.NewGuid().ToString()) { }
 
     public void AddComponent(Component component) {
         component.GameObject = this;

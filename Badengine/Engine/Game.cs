@@ -4,7 +4,7 @@ using static Raylib_cs.Raylib;
 namespace Badengine.Engine;
 
 public static class Game {
-    public const string Version = "1.1.2";
+    public const string Version = "1.2.0";
 
     private static Scene? _scene;
 
