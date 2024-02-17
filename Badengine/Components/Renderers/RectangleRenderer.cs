@@ -2,10 +2,10 @@ using Badengine.Engine;
 
 namespace Badengine; 
 
-public class RectangleRenderer : Component, IRenderer {
+public class RectangleRenderer : Renderer {
     public Color Color;
     
-    public void Render() {
+    public override void Render() {
         Graphics.DrawRectangle(GameObject.Transform.Position, GameObject.Transform.Size, Color);
     }
 }

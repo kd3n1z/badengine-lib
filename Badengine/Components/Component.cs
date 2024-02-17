@@ -4,6 +4,8 @@ using Badengine.Exceptions;
 namespace Badengine;
 
 public abstract class Component {
+    public bool IsActive = true;
+    
     private protected GameObject? _gameObject;
 
     public GameObject GameObject {

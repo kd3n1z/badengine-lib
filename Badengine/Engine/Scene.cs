@@ -14,21 +14,25 @@ public sealed class Scene {
     internal void Start() {
         if (!_startCalled) {
             _startCalled = true;
-            foreach (GameObject go in _gameObjects) {
-                go.Start();
+            foreach (GameObject gameObject in _gameObjects) {
+                gameObject.Start();
             }
         }
     }
 
     internal void Update() {
-        foreach (GameObject go in _gameObjects) {
-            go.Update();
+        foreach (GameObject gameObject in _gameObjects) {
+            if (gameObject.IsActive) {
+                gameObject.Update();
+            }
         }
     }
 
     internal void FixedUpdate() {
-        foreach (GameObject go in _gameObjects) {
-            go.FixedUpdate();
+        foreach (GameObject gameObject in _gameObjects) {
+            if (gameObject.IsActive) {
+                gameObject.FixedUpdate();
+            }
         }
     }
 
@@ -36,7 +40,9 @@ public sealed class Scene {
         Graphics.Clean();
 
         foreach (GameObject gameObject in _gameObjects) {
-            gameObject.Render();
+            if (gameObject.IsActive) {
+                gameObject.Render();
+            }
         }
     }
 

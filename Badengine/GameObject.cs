@@ -4,8 +4,10 @@ using Badengine.Exceptions;
 namespace Badengine;
 
 public sealed class GameObject {
+    public bool IsActive = true;
+
     private readonly List<Component> _components = new();
-    private readonly List<IRenderer> _renderers = new();
+    private readonly List<Renderer> _renderers = new();
     internal ICollider[] Colliders { get; private set; } = Array.Empty<ICollider>();
 
     public readonly Transform Transform;
@@ -41,7 +43,7 @@ public sealed class GameObject {
     public void AddComponent(Component component) {
         component.GameObject = this;
 
-        if (component is IRenderer renderer) {
+        if (component is Renderer renderer) {
             _renderers.Add(renderer);
         }
 
@@ -68,13 +70,17 @@ public sealed class GameObject {
 
     internal void Update() {
         foreach (Component component in _components) {
-            component.Update();
+            if (component.IsActive) {
+                component.Update();
+            }
         }
     }
 
     internal void FixedUpdate() {
         foreach (Component component in _components) {
-            component.FixedUpdate();
+            if (component.IsActive) {
+                component.Update();
+            }
         }
     }
 
@@ -85,8 +91,10 @@ public sealed class GameObject {
     }
 
     internal void Render() {
-        foreach (IRenderer renderer in _renderers) {
-            renderer.Render();
+        foreach (Renderer renderer in _renderers) {
+            if (renderer.IsActive) {
+                renderer.Render();
+            }
         }
     }
 
