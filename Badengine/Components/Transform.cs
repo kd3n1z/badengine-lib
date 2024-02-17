@@ -2,6 +2,7 @@ using Badengine.Attributes;
 
 namespace Badengine; 
 
+[AlwaysActive]
 [NonRegistrable]
 public class Transform : Component {
     public Vector2 Position = Vector2.Zero;
