@@ -79,7 +79,7 @@ public sealed class GameObject {
     internal void FixedUpdate() {
         foreach (Component component in _components) {
             if (component.IsActive) {
-                component.Update();
+                component.FixedUpdate();
             }
         }
     }
