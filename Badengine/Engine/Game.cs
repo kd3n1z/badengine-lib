@@ -1,10 +1,11 @@
 ﻿using Badengine.SceneManagement;
+using Raylib_cs;
 using static Raylib_cs.Raylib;
 
 namespace Badengine.Engine;
 
 public static class Game {
-    public const string Version = "1.4.1";
+    public const string Version = "1.4.2";
 
     private static Scene? _scene;
 
@@ -18,6 +19,8 @@ public static class Game {
 
     public static void Run(string title, float fixedDeltaTime = 0, bool debug = false, string buildInfo = "") {
         InitWindow(800, 450, title);
+
+        SetExitKey(0);
 
         Time.FixedDeltaTime = fixedDeltaTime;
 
