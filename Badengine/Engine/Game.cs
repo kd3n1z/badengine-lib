@@ -25,7 +25,7 @@ public static class Game {
         Time.FixedDeltaTime = fixedDeltaTime;
 
         CancellationTokenSource physicsThreadCancellationTokenSource = new CancellationTokenSource();
-        Thread physicsThread = new(() => PhysicsThread(physicsThreadCancellationTokenSource.Token, fixedDeltaTime, debug));
+        Thread physicsThread = new(() => PhysicsThread(fixedDeltaTime, debug, physicsThreadCancellationTokenSource.Token));
         physicsThread.Start();
 
         bool debugVisible = false;
@@ -92,7 +92,7 @@ public static class Game {
         physicsThread.Join();
     }
 
-    private static void PhysicsThread(CancellationToken cancellationToken, float deltaTime, bool debug) {
+    private static void PhysicsThread(float deltaTime, bool debug, CancellationToken cancellationToken) {
         DateTime previousFrameFinish = DateTime.Now;
 
         while (!cancellationToken.IsCancellationRequested) {
