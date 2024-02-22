@@ -6,7 +6,7 @@ public class Rigidbody : Component {
 
     public override void FixedUpdate() {
         Velocity.Y += Gravity * Time.FixedDeltaTime;
-        ICollider[] colliders = GameObject.Colliders;
+        Collider[] colliders = GameObject.Colliders;
 
         Vector2 move = Velocity * Time.FixedDeltaTime;
 
@@ -25,7 +25,7 @@ public class Rigidbody : Component {
         }
     }
 
-    public bool CheckOverlapsWithOffset(Vector2 offset, ICollider[] colliders) {
+    public bool CheckOverlapsWithOffset(Vector2 offset, Collider[] colliders) {
         return colliders.Select(collider => collider.GetPoints())
             .Any(points =>
                 GameObject.Scene.CheckColliderOverlaps(points[0] + offset, points[1] + offset, colliders)

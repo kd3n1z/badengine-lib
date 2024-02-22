@@ -46,11 +46,11 @@ public sealed class Scene {
         }
     }
 
-    internal bool CheckColliderOverlaps(Vector2 point, ICollider[] ignoredColliders) {
+    internal bool CheckColliderOverlaps(Vector2 point, Collider[] ignoredColliders) {
         return _gameObjects.Any(gameObject => gameObject.CheckColliderOverlaps(point, ignoredColliders));
     }
 
-    internal bool CheckColliderOverlaps(Vector2 bottomLeft, Vector2 topRight, ICollider[] ignoredColliders) {
+    internal bool CheckColliderOverlaps(Vector2 bottomLeft, Vector2 topRight, Collider[] ignoredColliders) {
         return _gameObjects.Any(gameObject => gameObject.CheckColliderOverlaps(bottomLeft, topRight, ignoredColliders));
     }
 }

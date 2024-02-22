@@ -8,7 +8,7 @@ public sealed class GameObject {
 
     private readonly List<Component> _components = new();
     private readonly List<Renderer> _renderers = new();
-    internal ICollider[] Colliders { get; private set; } = Array.Empty<ICollider>();
+    internal Collider[] Colliders { get; private set; } = Array.Empty<Collider>();
 
     public readonly Transform Transform;
     private Scene? _scene;
@@ -47,8 +47,8 @@ public sealed class GameObject {
             _renderers.Add(renderer);
         }
 
-        if (component is ICollider collider) {
-            ICollider[] modifiedColliders = new ICollider[Colliders.Length + 1];
+        if (component is Collider collider) {
+            Collider[] modifiedColliders = new Collider[Colliders.Length + 1];
             Array.Copy(Colliders, modifiedColliders, Colliders.Length);
             modifiedColliders[Colliders.Length] = collider;
 
@@ -98,11 +98,11 @@ public sealed class GameObject {
         }
     }
 
-    internal bool CheckColliderOverlaps(Vector2 point, ICollider[] ignoredColliders) {
-        return Colliders.Any(collider => !ignoredColliders.Contains(collider) && collider.OverlapsPoint(point));
+    internal bool CheckColliderOverlaps(Vector2 point, Collider[] ignoredColliders) {
+        return Colliders.Any(collider => collider.IsActive && !ignoredColliders.Contains(collider) && collider.OverlapsPoint(point));
     }
 
-    internal bool CheckColliderOverlaps(Vector2 bottomLeft, Vector2 topRight, ICollider[] ignoredColliders) {
-        return Colliders.Any(collider => !ignoredColliders.Contains(collider) && collider.OverlapsBox(bottomLeft, topRight));
+    internal bool CheckColliderOverlaps(Vector2 bottomLeft, Vector2 topRight, Collider[] ignoredColliders) {
+        return Colliders.Any(collider => collider.IsActive && !ignoredColliders.Contains(collider) && collider.OverlapsBox(bottomLeft, topRight));
     }
 }

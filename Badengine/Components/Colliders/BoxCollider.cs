@@ -1,7 +1,7 @@
 namespace Badengine;
 
-public class BoxCollider : Component, ICollider {
-    public bool OverlapsPoint(Vector2 point) {
+public class BoxCollider : Collider {
+    public override bool OverlapsPoint(Vector2 point) {
         Vector2[] points = GetPoints();
 
         return point.X > points[0].X &&
@@ -10,7 +10,7 @@ public class BoxCollider : Component, ICollider {
                point.Y < points[1].Y;
     }
 
-    public bool OverlapsBox(Vector2 bottomLeft, Vector2 topRight) {
+    public override bool OverlapsBox(Vector2 bottomLeft, Vector2 topRight) {
         Vector2[] points = GetPoints();
 
         return topRight.X > points[0].X &&
@@ -19,7 +19,7 @@ public class BoxCollider : Component, ICollider {
                bottomLeft.Y < points[1].Y;
     }
 
-    public Vector2[] GetPoints() {
+    public override Vector2[] GetPoints() {
         // returns [bottomLeft, topRight]
 
         return new[] { Transform.Position, Transform.Position + Transform.Size };

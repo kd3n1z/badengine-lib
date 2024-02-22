@@ -1,11 +1,10 @@
 ﻿using Badengine.SceneManagement;
-using Raylib_cs;
 using static Raylib_cs.Raylib;
 
 namespace Badengine.Engine;
 
 public static class Game {
-    public const string Version = "1.4.2";
+    public const string Version = "1.4.3";
 
     private static Scene? _scene;
 
