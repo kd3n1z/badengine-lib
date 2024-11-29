@@ -5,7 +5,7 @@ using SFML.Window;
 namespace Badengine.Engine;
 
 public static class Game {
-    public const string Version = "1.5.0";
+    public const string Version = "1.6.0";
 
     private static Scene? _scene;
 
@@ -23,6 +23,8 @@ public static class Game {
     private static RenderWindow _window = null!;
 
     public static void Run(string title, float fixedDeltaTime = 0, string buildInfo = "") {
+        Assets.LoadAssets();
+
         _window = new RenderWindow(new VideoMode(800, 450),
 #if BADENGINE_DEBUG
             "[DEBUG] " +

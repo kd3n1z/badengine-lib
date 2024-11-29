@@ -22,23 +22,28 @@ internal static class Graphics {
             Right
         }
 
-        public static void DrawText(string text, int x, int y, Color color, int fontSize, TextOrigin origin) {
-            // TODO
-            
-            // int width = Raylib.MeasureText(text, fontSize);
-            // int xPos = x;
-            // switch (origin) {
-            //     case TextOrigin.Left:
-            //         break;
-            //     case TextOrigin.Center:
-            //         xPos -= width / 2;
-            //         break;
-            //     case TextOrigin.Right:
-            //         xPos -= width;
-            //         break;
-            // }
-            //
-            // Raylib.DrawText(text, xPos, y, fontSize, color.ToRaylibColor());
+        public static void DrawText(string text, int x, int y, Color color, uint fontSize, TextOrigin origin) {
+            Text textObject = new Text(text, Assets.Fonts["default"], fontSize) { FillColor = color };
+
+            float width = textObject.GetLocalBounds().Width;
+            float xPosition = x;
+
+            switch (origin) {
+                case TextOrigin.Left:
+                    break;
+                case TextOrigin.Center:
+                    xPosition -= width / 2;
+                    break;
+                case TextOrigin.Right:
+                    xPosition -= width;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(origin), origin, null);
+            }
+
+            textObject.Position = new Vector2f(xPosition, y);
+
+            _renderTarget.Draw(textObject);
         }
     }
 
