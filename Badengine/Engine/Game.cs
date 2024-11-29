@@ -1,10 +1,11 @@
 ﻿using Badengine.SceneManagement;
-using static Raylib_cs.Raylib;
+using SFML.Graphics;
+using SFML.Window;
 
 namespace Badengine.Engine;
 
 public static class Game {
-    public const string Version = "1.4.4";
+    public const string Version = "1.5.0";
 
     private static Scene? _scene;
 
@@ -19,15 +20,24 @@ public static class Game {
     private static int _debugPhysicsFrames;
 #endif
 
+    private static RenderWindow _window = null!;
+
     public static void Run(string title, float fixedDeltaTime = 0, string buildInfo = "") {
-        InitWindow(800, 450,
+        _window = new RenderWindow(new VideoMode(800, 450),
 #if BADENGINE_DEBUG
             "[DEBUG] " +
 #endif
             title
         );
 
-        SetExitKey(0);
+        _window.SetKeyRepeatEnabled(false);
+
+        _window.Closed += (_, _) => { _window.Close(); };
+
+        _window.KeyPressed += Input.OnKeyPressed;
+        _window.KeyReleased += Input.OnKeyReleased;
+
+        Graphics.SetRenderTarget(_window);
 
         Time.FixedDeltaTime = fixedDeltaTime;
 
@@ -35,18 +45,22 @@ public static class Game {
         Thread physicsThread = new(() => PhysicsThread(fixedDeltaTime, physicsThreadCancellationTokenSource.Token));
         physicsThread.Start();
 
+
 #if BADENGINE_DEBUG
         bool debugVisible = false;
         int debugAverageFps = 0;
         int debugAveragePhysicsFps = 0;
         DateTime debugPreviousFpsUpdate = DateTime.Now;
         int debugFrames = 0;
+
+        string debugSfmlVersion = typeof(SFML.System.CSFML).Assembly.GetName().Version!.ToString();
 #endif
 
-        while (!WindowShouldClose()) {
+        while (_window.IsOpen) {
             DateTime frameStart = DateTime.Now;
 
-            Graphics.BeginDrawing();
+            Input.PreprocessEvents();
+            _window.DispatchEvents();
 
             if (_scene == null) {
                 Graphics.UI.DrawText("no scene set", 400, 225, new Color(255, 255, 255), 32,
@@ -82,7 +96,7 @@ public static class Game {
                 Graphics.UI.DrawText(
                     "fps: " + debugAverageFps +
                     "\npfps: " + debugAveragePhysicsFps +
-                    "\ninfo:\n- raylib v" + RAYLIB_VERSION +
+                    "\ninfo:\n- SFML.Net v" + debugSfmlVersion +
                     "\n- badengine-lib v" + Version +
                     (buildInfo != "" ? "\n- " + buildInfo : ""),
                     20, 20, Color.Red, 18, Graphics.UI.TextOrigin.Left
@@ -90,12 +104,10 @@ public static class Game {
             }
 #endif
 
-            Graphics.EndDrawing();
+            _window.Display();
 
             Time.DeltaTime = (float)(DateTime.Now - frameStart).TotalSeconds;
         }
-
-        CloseWindow();
 
         physicsThreadCancellationTokenSource.Cancel();
         physicsThread.Join();
@@ -106,7 +118,7 @@ public static class Game {
 
         while (!cancellationToken.IsCancellationRequested) {
 #if BADENGINE_DEBUG
-                _debugPhysicsFrames++;
+            _debugPhysicsFrames++;
 #endif
 
             DateTime frameStart = DateTime.Now;

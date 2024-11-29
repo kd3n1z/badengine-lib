@@ -37,7 +37,7 @@ public sealed class Scene {
     }
 
     internal void Render() {
-        Graphics.Clean();
+        Graphics.Clear();
 
         foreach (GameObject gameObject in _gameObjects) {
             if (gameObject.IsActive) {

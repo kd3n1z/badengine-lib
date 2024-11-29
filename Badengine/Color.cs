@@ -1,6 +1,5 @@
 namespace Badengine;
 
-// Copied from Raylib_cs.Color
 public struct Color {
     public byte R;
     public byte G;
@@ -21,13 +20,12 @@ public struct Color {
         A = Convert.ToByte(a);
     }
 
-    public Raylib_cs.Color ToRaylibColor() {
-        return new Raylib_cs.Color(R, G, B, A);
-    }
 
-    public override string ToString() {
-        return $"{{R:{R} G:{G} B:{B} A:{A}}}";
-    }
+    public static implicit operator SFML.Graphics.Color(Color color) => new SFML.Graphics.Color(color.R, color.G, color.B, color.A);
+
+    public override string ToString() => $"[Color] R({R}) G({G}) B({B}) A({A})";
+
+    // Copied from Raylib_cs.Color
 
     #region Built-in Colors
 
